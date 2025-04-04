@@ -1,5 +1,8 @@
 package servicioalmacen;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -10,12 +13,11 @@ import java.util.Iterator;
  *
  * @author raulp
  */
+public class GestionAlmacenesImpl extends UnicastRemoteObject implements GestionAlmacenes {
 
-public class GestionAlmacenesImpl extends UnicastRemoteObject implements GestionAlmacenes{
-    
     ArrayList<TDatosAlmacen> almacenes;
-    
-    public GestionAlmacenesImpl() throws RemoteException{
+
+    public GestionAlmacenesImpl() throws RemoteException {
         super();
         almacenes = new ArrayList<>();
     }
@@ -33,21 +35,43 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     @Override
     public int CrearAlmacen(String pNombre, String pDireccion, String pNomFichero) throws RemoteException {
         int posicion = buscarAlmacenAbierto(pNomFichero);
-        if(posicion != -1){
+        if (posicion != -1) {
             TDatosAlmacen almacen = new TDatosAlmacen(pNombre, pDireccion, pNomFichero);
             almacenes.add(almacen);
             posicion = buscarAlmacenAbierto(pNomFichero);
         }
-        
+
         return posicion;
     }
-    
+
     @Override
     public int AbrirAlmacen(String pNomFichero) throws RemoteException {
         int posicion = buscarAlmacenAbierto(pNomFichero);
-        if(posicion!= -1){
-            
+        if (posicion != -1) {
+            try (DataInputStream dis = new DataInputStream(new FileInputStream(pNomFichero))) {
+                // Leer la cabecera
+                int numProductos = dis.readInt();  // Número de productos
+                String nombreAlmacen = dis.readUTF();  // Nombre del almacén
+                String direccionAlmacen = dis.readUTF();  // Dirección del almacén
+
+                TDatosAlmacen almacen = new TDatosAlmacen(nombreAlmacen, direccionAlmacen, pNomFichero);
+                
+                // Leer y mostrar los productos
+                for (int i = 0; i < numProductos; i++) {
+                    String codigo = dis.readUTF();
+                    String nombre = dis.readUTF();
+                    Float precio = dis.readFloat();
+                    int cantidad = dis.readInt();
+                    
+                    String nombre = dis.readUTF();
+                    almacen.getProductos().add(producto);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+        return posicion;
     }
 
     @Override
@@ -81,15 +105,15 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     @Override
     public boolean EliminarProducto(int pAlmacen, String pCodProducto) throws RemoteException {
     }
-    
-    
-    private int buscarAlmacenAbierto(String pNomFichero){
+
+    private int buscarAlmacenAbierto(String pNomFichero) {
         int posicion = -1;
         for (int i = 0; i < almacenes.size(); i++) {
-            if(almacenes.get(i).getFichero().equals(pNomFichero))
+            if (almacenes.get(i).getFichero().equals(pNomFichero)) {
                 posicion = i;
+            }
         }
-        
+
         return posicion;
     }
 }
