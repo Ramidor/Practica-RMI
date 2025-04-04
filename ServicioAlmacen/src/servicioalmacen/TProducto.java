@@ -1,14 +1,18 @@
 package servicioalmacen;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+import java.util.Date;
 
 /**
  *
  * @author raulp
  */
 public class TProducto {
-    
+
+    String codProd;
+    int cantidad;
+    String nombreProd;
+    float precio;
+    String descripcion;
+    Date caducidad;
+
 }

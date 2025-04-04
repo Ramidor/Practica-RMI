@@ -7,7 +7,7 @@ import java.rmi.*;
  * @author raulp
  */
 
-public interface GestionAlmacenesIntf extends Remote {
+public interface GestionAlmacenes extends Remote {
     TDatosAlmacen DatosAlmacen(int pAlmacen) throws RemoteException;
     int  NProductos(int pAlmacen) throws RemoteException;
 
