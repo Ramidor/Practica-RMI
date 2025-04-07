@@ -7,9 +7,11 @@ import java.util.ArrayList;
  * @author raulp
  */
 public class TDatosAlmacen {
+
     private String nombre;
     private String direccion;
     private String fichero;
+    private int NClientes;
     private ArrayList<TProducto> productos;
 
     public TDatosAlmacen(String nombre, String direccion, String fichero) {
@@ -43,6 +45,14 @@ public class TDatosAlmacen {
         this.fichero = fichero;
     }
 
+    public int getNClientes() {
+        return NClientes;
+    }
+
+    public void setNClientes(int NClientes) {
+        this.NClientes = NClientes;
+    }
+
     public ArrayList<TProducto> getProductos() {
         return productos;
     }
@@ -50,8 +60,5 @@ public class TDatosAlmacen {
     public void setProductos(ArrayList<TProducto> productos) {
         this.productos = productos;
     }
-    
-    
-    
-    
+
 }
