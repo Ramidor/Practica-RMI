@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/raulp/Documents/NetBeansProjects/ServicioAlmacen/src/servicioalmacen/TDatosAlmacen.java</file>
-            <file>file:/C:/Users/raulp/Documents/NetBeansProjects/ServicioAlmacen/src/servicioalmacen/GestionAlmacenesIntf.java</file>
-            <file>file:/C:/Users/raulp/Documents/NetBeansProjects/ServicioAlmacen/src/servicioalmacen/TProducto.java</file>
+            <file>file:/C:/Users/raulp/Documents/NetBeansProjects/Practica-RMI/ServicioAlmacen/src/servicioalmacen/GestionAlmacenes.java</file>
+            <file>file:/C:/Users/raulp/Documents/NetBeansProjects/Practica-RMI/ServicioAlmacen/src/servicioalmacen/TDatosAlmacen.java</file>
+            <file>file:/C:/Users/raulp/Documents/NetBeansProjects/Practica-RMI/ServicioAlmacen/src/servicioalmacen/GestionAlmacenesImpl.java</file>
+            <file>file:/C:/Users/raulp/Documents/NetBeansProjects/Practica-RMI/ServicioAlmacen/src/servicioalmacen/TProducto.java</file>
         </group>
     </open-files>
 </project-private>

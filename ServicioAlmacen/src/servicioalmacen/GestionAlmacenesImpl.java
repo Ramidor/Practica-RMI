@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class GestionAlmacenesImpl extends UnicastRemoteObject implements GestionAlmacenes {
 
     ArrayList<TDatosAlmacen> almacenes;
+    int nAlmacenesAbiertos = 0;
 
     public GestionAlmacenesImpl() throws RemoteException {
         super();
@@ -24,7 +25,11 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
 
     @Override
     public TDatosAlmacen DatosAlmacen(int pAlmacen) throws RemoteException {
-        return almacenes.get(pAlmacen);
+        TDatosAlmacen almacen = null;
+        if (AlmacenAbierto(pAlmacen)) {
+            almacen = almacenes.get(pAlmacen);
+        }
+        return almacen;
     }
 
     @Override
@@ -39,6 +44,11 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
             TDatosAlmacen almacen = new TDatosAlmacen(pNombre, pDireccion, pNomFichero);
             almacenes.add(almacen);
             posicion = buscarAlmacenAbierto(pNomFichero);
+            nAlmacenesAbiertos++;
+        } else {
+            int nClientes = almacenes.get(posicion).getNClientes();
+            almacenes.get(posicion).setNClientes(nClientes);
+            nAlmacenesAbiertos++;
         }
 
         return posicion;
@@ -56,21 +66,26 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
                 String direccionAlmacen = dis.readUTF();  // Dirección del almacén
 
                 TDatosAlmacen almacen = new TDatosAlmacen(nombreAlmacen, direccionAlmacen, pNomFichero);
-                
+                almacen.setNClientes(1);
                 // Leer los productos del fichero
                 for (int i = 0; i < numProductos; i++) {
-                    
+
                     producto.setCodProd(dis.readUTF());
                     producto.setNombreProd(dis.readUTF());
                     producto.setPrecio(dis.readFloat());
                     producto.setCantidad(dis.readInt());
                     producto.setDescripcion(dis.readUTF());
-                    
+
                     almacen.getProductos().add(producto);
                 }
+                nAlmacenesAbiertos++;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            int nClientes = almacenes.get(posicion).getNClientes();
+            almacenes.get(posicion).setNClientes(nClientes);
+            nAlmacenesAbiertos++;
         }
 
         return posicion;
@@ -78,74 +93,120 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
 
     @Override
     public boolean GuardarAlmacen(int pAlmacen) throws RemoteException {
-        boolean ok=false;
+        boolean ok = false;
 
         TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
         try (DataOutputStream dis = new DataOutputStream(new FileOutputStream(almacen.getFichero()))) {
-            
-                dis.writeInt(almacen.getProductos().size());
-                dis.writeUTF(almacen.getNombre());
-                dis.writeUTF(almacen.getDireccion());
-                
-                for (int i = 0; i < almacen.getProductos().size(); i++) {
-                    dis.writeUTF(almacen.getProductos().get(i).getCodProd());
-                    dis.writeUTF(almacen.getProductos().get(i).getNombreProd());
-                    dis.writeFloat(almacen.getProductos().get(i).getPrecio());
-                    dis.writeInt(almacen.getProductos().get(i).getCantidad());
-                    dis.writeUTF(almacen.getProductos().get(i).getCaducidad());
-                    dis.writeUTF(almacen.getProductos().get(i).getDescripcion());
-                }
-                ok=true;
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            dis.writeInt(almacen.getProductos().size());
+            dis.writeUTF(almacen.getNombre());
+            dis.writeUTF(almacen.getDireccion());
+
+            for (int i = 0; i < almacen.getProductos().size(); i++) {
+                dis.writeUTF(almacen.getProductos().get(i).getCodProd());
+                dis.writeUTF(almacen.getProductos().get(i).getNombreProd());
+                dis.writeFloat(almacen.getProductos().get(i).getPrecio());
+                dis.writeInt(almacen.getProductos().get(i).getCantidad());
+                dis.writeUTF(almacen.getProductos().get(i).getCaducidad());
+                dis.writeUTF(almacen.getProductos().get(i).getDescripcion());
             }
-        
+            ok = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return ok;
     }
 
     @Override
     public boolean CerrarAlmacen(int pAlmacen) throws RemoteException {
-        boolean ok=false;
-        
-        
+        boolean ok = false;
+        int nClientes = almacenes.get(pAlmacen).getNClientes();
+        if (nClientes > 1) {
+            nClientes--;
+            GuardarAlmacen(pAlmacen);
+            almacenes.get(pAlmacen).setNClientes(nClientes);
+            ok = true;
+        } else {
+            GuardarAlmacen(pAlmacen);
+            nClientes = -1;
+            almacenes.get(pAlmacen).setNClientes(nClientes);
+            ok = true;
+            nAlmacenesAbiertos--;
+            if (nAlmacenesAbiertos == 0) {
+                almacenes.clear();
+            }
+        }
         return ok;
     }
 
     @Override
     public boolean AlmacenAbierto(int pAlmacen) throws RemoteException {
         boolean encontrado;
-        
-        if(almacenes.get(pAlmacen).getNClientes()==-1)
+
+        if (almacenes.get(pAlmacen).getNClientes() == -1 || pAlmacen > almacenes.size() || pAlmacen < 0) {
             encontrado = false;
-        else
+        } else {
             encontrado = false;
-        
+        }
+
         return encontrado;
     }
 
     @Override
     public int BuscaProducto(int pAlmacen, String pCodProducto) throws RemoteException {
-        return 0;
+        int posicion = -1;
+        TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
+        for (int i = 0; i < almacen.getProductos().size(); i++) {
+            if (almacen.getProductos().get(i).getCodProd().equals(pCodProducto)) {
+                posicion = i;
+            }
+        }
+        return posicion;
     }
 
     @Override
     public TProducto ObtenerProducto(int pAlmacen, int pPosProducto) throws RemoteException {
-        return null;
+        TProducto producto = null;
+        TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
+        if (pPosProducto > 0 && pPosProducto < almacen.getProductos().size()) {
+            producto = almacen.getProductos().get(pPosProducto);
+        }
+        return producto;
     }
 
     @Override
     public boolean AnadirProducto(int pAlmacen, TProducto pProdNuevo) throws RemoteException {
-        return true;
+        boolean ok = false;
+        TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
+        if(almacen.getProductos().add(pProdNuevo))
+            ok = true;
+        return ok;
     }
 
     @Override
     public boolean ActualizarProducto(int pAlmacen, TProducto pProducto) throws RemoteException {
-        return true;
+        boolean ok = false;
+        int posicion = BuscaProducto(pAlmacen, pProducto.getCodProd());
+        TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
+        if (posicion != -1) {
+            almacen.getProductos().add(posicion, pProducto);
+            ok = true;
+        }
+        return ok;
     }
 
     @Override
     public boolean EliminarProducto(int pAlmacen, String pCodProducto) throws RemoteException {
-        return true;
+        boolean ok = false;
+        TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
+        for (int i = 0; i < almacen.getProductos().size(); i++) {
+            if (almacen.getProductos().get(i).getCodProd().equals(pCodProducto)) {
+                almacen.getProductos().remove(i);
+                ok = true;
+            }
+        }
+        return ok;
     }
 
     private int buscarAlmacenAbierto(String pNomFichero) {
