@@ -1,12 +1,13 @@
 package servicioalmacen;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author raulp
  */
-public class TDatosAlmacen {
+public class TDatosAlmacen implements Serializable{
 
     private String nombre;
     private String direccion;

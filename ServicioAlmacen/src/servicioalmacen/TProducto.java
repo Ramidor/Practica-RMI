@@ -1,12 +1,13 @@
 package servicioalmacen;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author raulp
  */
-public class TProducto {
+public class TProducto implements Serializable{
 
     private String codProd;
     private int cantidad;
@@ -22,6 +23,9 @@ public class TProducto {
         this.precio = precio;
         this.descripcion = descripcion;
         this.caducidad = caducidad;
+    }
+
+    public TProducto() {
     }
 
     public String getCodProd() {
@@ -71,6 +75,11 @@ public class TProducto {
     public void setCaducidad(String caducidad) {
         this.caducidad = caducidad;
     }
-    
+    @Override
+    public String toString(){
+        String resultado = null;
+        resultado=""+getCodProd()+"\t\t"+getNombreProd()+"\t\t"+getPrecio()+"\t\t"+getCantidad()+"\t\t"+getCaducidad();
+        return resultado ;
+    }
     
 }

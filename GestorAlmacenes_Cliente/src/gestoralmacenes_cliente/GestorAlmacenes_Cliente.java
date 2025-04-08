@@ -61,13 +61,14 @@ public static void main(String[] args) {
             String codProducto, nombreProd, fechaProd, descripcionProd;
             int numProducto;
             TDatosAlmacen datosAlmacen = null;
-            TProducto datosProducto = null;
+            TProducto datosProducto=new TProducto();
 
             int Opcion = 0, posAlmacenAbierto = -1;
 
             do {
                 if(posAlmacenAbierto!=-1){
                 datosAlmacen = gestStub.DatosAlmacen(posAlmacenAbierto);
+              
                 Opcion = MenuPrincipal(""+datosAlmacen.getNombre());
                 }else
                     Opcion = MenuPrincipal("");
@@ -99,7 +100,7 @@ public static void main(String[] args) {
                             posAlmacenAbierto = -1;
                         }
                         System.out.println("Introduce el nombre del fichero del almacen");
-                        sc.next(nombreFichero);
+                        nombreFichero=sc2.nextLine();
                         posAlmacenAbierto = gestStub.AbrirAlmacen(nombreFichero);
                         if (posAlmacenAbierto == -1) {
                             System.out.println("El fichero no se ha logrado abrir correctamente");
@@ -149,28 +150,28 @@ public static void main(String[] args) {
 
                     case 6:
                         String codProd,
-                         fecha,
-                         cantidad,
-                         precio,
+                         fecha,                         
                          nombre;
+                        float precio;
+                        int cantidad;
                         if (posAlmacenAbierto == -1) {
                             System.out.println("No hay ningún almacen abierto");
                         } else {
                             System.out.println("Introduce el codigo del producto");
-                            codProd = sc.next();
+                            codProd = sc2.nextLine();
                             datosProducto.setCodProd(codProd);
                             System.out.println("Introduce el nombre del producto");
-                            codProd = sc.next();
-                            datosProducto.setCodProd(codProd);
+                            nombre = sc2.nextLine();
+                            datosProducto.setNombreProd(nombre);
                             System.out.println("Introduce el precio del producto");
-                            codProd = sc.next();
-                            datosProducto.setCodProd(codProd);
+                            precio = sc2.nextFloat();
+                            datosProducto.setPrecio(precio);
                             System.out.println("Introduce el cantidad del producto");
-                            codProd = sc.next();
-                            datosProducto.setCodProd(codProd);
+                            cantidad = sc2.nextInt();
+                            datosProducto.setCantidad(cantidad);
                             System.out.println("Introduce el fecha del producto");
-                            codProd = sc.next();
-                            datosProducto.setCodProd(codProd);
+                            fecha = sc2.nextLine();
+                            datosProducto.setCaducidad(fecha);
                             if (!gestStub.AnadirProducto(posAlmacenAbierto, datosProducto)) {
                                 System.out.println("No se pudo insertar el producto de forma correcta");
                             } else {

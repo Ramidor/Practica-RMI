@@ -27,8 +27,10 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     public TDatosAlmacen DatosAlmacen(int pAlmacen) throws RemoteException {
         TDatosAlmacen almacen = null;
         if (AlmacenAbierto(pAlmacen)) {
+
             almacen = almacenes.get(pAlmacen);
         }
+        System.out.println("" + almacen);
         return almacen;
     }
 
@@ -42,8 +44,10 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
         int posicion = buscarAlmacenAbierto(pNomFichero);
         if (posicion == -1) {
             TDatosAlmacen almacen = new TDatosAlmacen(pNombre, pDireccion, pNomFichero);
+            almacen.setNClientes(1);
             almacenes.add(almacen);
             posicion = buscarAlmacenAbierto(pNomFichero);
+
             nAlmacenesAbiertos++;
         } else {
             int nClientes = almacenes.get(posicion).getNClientes();
@@ -58,7 +62,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     public int AbrirAlmacen(String pNomFichero) throws RemoteException {
         int posicion = buscarAlmacenAbierto(pNomFichero);
         TProducto producto = null;
-        if (posicion != -1) {
+        if (posicion == -1) {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(pNomFichero))) {
                 // Leer la cabecera
                 int numProductos = dis.readInt();  // Número de productos
@@ -66,6 +70,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
                 String direccionAlmacen = dis.readUTF();  // Dirección del almacén
 
                 TDatosAlmacen almacen = new TDatosAlmacen(nombreAlmacen, direccionAlmacen, pNomFichero);
+
                 almacen.setNClientes(1);
                 // Leer los productos del fichero
                 for (int i = 0; i < numProductos; i++) {
@@ -78,7 +83,10 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
 
                     almacen.getProductos().add(producto);
                 }
+                almacenes.add(almacen);
                 nAlmacenesAbiertos++;
+                posicion = buscarAlmacenAbierto(pNomFichero);
+                System.out.println("" + posicion);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -146,7 +154,9 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
 
         if (almacenes.get(pAlmacen).getNClientes() == -1 || pAlmacen > almacenes.size() || pAlmacen < 0) {
             encontrado = false;
+
         } else {
+
             encontrado = true;
         }
 
@@ -169,7 +179,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     public TProducto ObtenerProducto(int pAlmacen, int pPosProducto) throws RemoteException {
         TProducto producto = null;
         TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
-        if (pPosProducto > 0 && pPosProducto < almacen.getProductos().size()) {
+        if (pPosProducto >= 0 && pPosProducto < almacen.getProductos().size()) {
             producto = almacen.getProductos().get(pPosProducto);
         }
         return producto;
@@ -179,8 +189,11 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     public boolean AnadirProducto(int pAlmacen, TProducto pProdNuevo) throws RemoteException {
         boolean ok = false;
         TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
-        if(almacen.getProductos().add(pProdNuevo))
+        System.out.println("Pito chico");
+        if (almacen.getProductos().add(pProdNuevo)) {
+            System.out.println("Pito intermedio");
             ok = true;
+        }
         return ok;
     }
 
