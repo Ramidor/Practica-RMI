@@ -7,6 +7,7 @@ package gestoralmacenes_servidor;
 import servicioalmacen.GestionAlmacenes;
 import servicioalmacen.GestionAlmacenesImpl;
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -20,8 +21,9 @@ public class GestorAlmacenes_Servidor {
 
     /**
      * @param args the command line arguments
+     * @throws java.rmi.RemoteException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws RemoteException{
         // TODO code application logic here
                 try {
             int Puerto = 0;
@@ -32,10 +34,12 @@ public class GestorAlmacenes_Servidor {
             Registry registry = LocateRegistry.createRegistry(Puerto);
             GestionAlmacenesImpl obj = new GestionAlmacenesImpl();
 
-            GestionAlmacenes stub = (GestionAlmacenes) UnicastRemoteObject.exportObject(obj, Puerto);
+            //GestionAlmacenes stub = (GestionAlmacenes) UnicastRemoteObject.exportObject(obj, Puerto);
+
+
 
             registry = LocateRegistry.getRegistry(Puerto);
-            registry.bind("GestorAlmacen", (Remote) stub);
+            registry.bind("GestorAlmacen", obj);
 
             System.out.println("Servidor Gestor Almacen esperando peticiones ... ");
         } catch (Exception e) {
