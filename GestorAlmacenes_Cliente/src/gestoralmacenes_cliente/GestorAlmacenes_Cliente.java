@@ -47,7 +47,8 @@ public static void main(String[] args) {
         try {
             int Puerto = 0;
             String Host;
-            Scanner sc = new Scanner(System.in);
+            Scanner sc = new Scanner(System.in);//NUMEROS
+            Scanner sc2 = new Scanner(System.in);//STRING
             System.out.print("Introduce el nº de puerto para comunicarse: ");
             Puerto = sc.nextInt();
             System.out.print("Introduce el nombre del host: ");
@@ -82,15 +83,15 @@ public static void main(String[] args) {
                             gestStub.CerrarAlmacen(posAlmacenAbierto);
                             posAlmacenAbierto = -1;
                         }
-                        System.out.println("Introduce el nombre del almacen nuevo");
-                        sc.next(nombreAlmacen);
+                        System.out.println("Introduce el nombre del almacen nuevo: ");
+                        nombreAlmacen=sc2.nextLine();
                         System.out.println("Introduce la direccion del almacen nuevo");
-                        sc.next(nombreDireccion);
+                        nombreDireccion=sc2.nextLine();
                         System.out.println("Introduce el nombre del fichero del almacen nuevo");
-                        sc.next(nombreFichero);
+                        nombreFichero=sc2.nextLine();
 
                         posAlmacenAbierto = gestStub.CrearAlmacen(nombreAlmacen, nombreDireccion, nombreFichero);
-
+                        System.out.println(""+posAlmacenAbierto);
                         break;
                     case 2:
                         if (posAlmacenAbierto != -1) {

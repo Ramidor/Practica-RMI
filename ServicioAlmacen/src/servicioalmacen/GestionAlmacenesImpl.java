@@ -40,7 +40,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     @Override
     public int CrearAlmacen(String pNombre, String pDireccion, String pNomFichero) throws RemoteException {
         int posicion = buscarAlmacenAbierto(pNomFichero);
-        if (posicion != -1) {
+        if (posicion == -1) {
             TDatosAlmacen almacen = new TDatosAlmacen(pNombre, pDireccion, pNomFichero);
             almacenes.add(almacen);
             posicion = buscarAlmacenAbierto(pNomFichero);
@@ -147,7 +147,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
         if (almacenes.get(pAlmacen).getNClientes() == -1 || pAlmacen > almacenes.size() || pAlmacen < 0) {
             encontrado = false;
         } else {
-            encontrado = false;
+            encontrado = true;
         }
 
         return encontrado;
