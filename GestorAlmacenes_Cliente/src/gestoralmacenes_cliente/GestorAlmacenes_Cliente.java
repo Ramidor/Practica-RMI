@@ -23,7 +23,7 @@ public class GestorAlmacenes_Cliente {
         int Salida;
         do {
 
-            System.out.println("\n**************************** Nombre del almacen: ");
+            System.out.println("\n**************************** Nombre del almacen: "+nombreFichero);
             System.out.println("**");
             System.out.println("** 1.- Crear un almacen vacío");
             System.out.println("** 2.- Abrir un  fichero de almacén");
@@ -38,7 +38,7 @@ public class GestorAlmacenes_Cliente {
             System.out.println("**");
             System.out.print("** Elige Opcion:");
             Salida = Teclado.nextInt();
-        } while (Salida < 1 || Salida > 9);
+        } while (Salida < 0 || Salida > 9);
         return Salida;
     }
 
@@ -65,9 +65,13 @@ public static void main(String[] args) {
             int Opcion = 0, posAlmacenAbierto = -1;
 
             do {
+                if(posAlmacenAbierto!=-1){
                 datosAlmacen = gestStub.DatosAlmacen(posAlmacenAbierto);
-                Opcion = MenuPrincipal(datosAlmacen.getNombre());
-                if (Opcion > 9 || Opcion < 1) {
+                Opcion = MenuPrincipal(""+datosAlmacen.getNombre());
+                }else
+                    Opcion = MenuPrincipal("");
+                    
+                if (Opcion > 9 || Opcion < 0) {
                     System.out.println("Opcion Incorrecta CRACK, VE ESPABILANDO Y PON HALGO BIEN");
                     Opcion = MenuPrincipal(nombreFichero);
                 }
