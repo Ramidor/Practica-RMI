@@ -206,10 +206,13 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     @Override
     public boolean ActualizarProducto(int pAlmacen, TProducto pProducto) throws RemoteException {
         boolean ok = false;
+        
         int posicion = BuscaProducto(pAlmacen, pProducto.getCodProd());
         TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
         if (posicion != -1) {
+            
             almacen.getProductos().add(posicion, pProducto);
+            almacen.getProductos().remove(posicion+1);
             ok = true;
         }
         return ok;

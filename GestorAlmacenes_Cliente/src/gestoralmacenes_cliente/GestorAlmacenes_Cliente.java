@@ -49,13 +49,14 @@ public static void main(String[] args) {
             String Host;
             Scanner sc = new Scanner(System.in);//NUMEROS
             Scanner sc2 = new Scanner(System.in);//STRING
-            System.out.print("Introduce el nº de puerto para comunicarse: ");
+          /*  System.out.print("Introduce el nº de puerto para comunicarse: ");
             Puerto = sc.nextInt();
             System.out.print("Introduce el nombre del host: ");
             Host = sc.next();
-
+*/
             // Obtiene el stub del rmiregistry
             Random rnd = new Random(System.nanoTime());
+            //GestionAlmacenes gestStub = (GestionAlmacenes) Naming.lookup("rmi://" + Host + ":" + Puerto + "/GestorAlmacen");
             GestionAlmacenes gestStub = (GestionAlmacenes) Naming.lookup("rmi://localhost:12/GestorAlmacen");
             String nombreAlmacen = null, nombreDireccion = null, nombreFichero = null;
             String codProducto, nombreProd, fechaProd, descripcionProd;
@@ -258,11 +259,11 @@ public static void main(String[] args) {
                                 opt = sc2.next();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce la nueva descripcion del producto: ");
-                                    descripcionProd = sc2.next();
+                                    descripcionProd = sc2.nextLine();
                                     datosProducto.setDescripcion(descripcionProd);
                                 }
                             }
-                            gestStub.ActualizarProducto(posicion, datosProducto);
+                            gestStub.ActualizarProducto(posAlmacenAbierto, datosProducto);
                         }
 
                         break;
