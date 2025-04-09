@@ -7,22 +7,28 @@ import java.util.Date;
  *
  * @author raulp
  */
-public class TProducto implements Serializable{
+public class TProducto implements Serializable {
 
     private String codProd;
     private int cantidad;
     private String nombreProd;
     private float precio;
     private String descripcion;
-    private String caducidad;
 
-    public TProducto(String codProd, int cantidad, String nombreProd, float precio, String descripcion, String caducidad) {
+    private int dia;
+    private int mes;
+    private int ano;
+
+    public TProducto(String codProd, int cantidad, String nombreProd, float precio, String descripcion, int dia, int mes, int ano) {
         this.codProd = codProd;
         this.cantidad = cantidad;
         this.nombreProd = nombreProd;
         this.precio = precio;
         this.descripcion = descripcion;
-        this.caducidad = caducidad;
+
+        this.dia = dia;
+        this.mes = mes;
+        this.ano = ano;
     }
 
     public TProducto() {
@@ -68,18 +74,36 @@ public class TProducto implements Serializable{
         this.descripcion = descripcion;
     }
 
-    public String getCaducidad() {
-        return caducidad;
+    public int getDia() {
+        return dia;
     }
 
-    public void setCaducidad(String caducidad) {
-        this.caducidad = caducidad;
+    public void setDia(int dia) {
+        this.dia = dia;
     }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
         String resultado = null;
-        resultado=""+getCodProd()+"\t\t"+getNombreProd()+"\t\t"+getPrecio()+"\t\t"+getCantidad()+"\t\t"+getCaducidad();
-        return resultado ;
+        resultado = "" + getCodProd() + "\t\t" + getNombreProd() + "\t\t" + getPrecio() + "\t\t"
+                + "" + getCantidad() + "\t\t" + getDia() + "/" + getMes() + "/" + getAno();
+        return resultado;
     }
-    
+
 }

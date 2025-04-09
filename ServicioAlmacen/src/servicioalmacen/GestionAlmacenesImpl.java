@@ -30,7 +30,6 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
 
             almacen = almacenes.get(pAlmacen);
         }
-        System.out.println("" + almacen);
         return almacen;
     }
 
@@ -76,10 +75,14 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
                 for (int i = 0; i < numProductos; i++) {
 
                     producto.setCodProd(dis.readUTF());
+                    producto.setCantidad(dis.readInt());
                     producto.setNombreProd(dis.readUTF());
                     producto.setPrecio(dis.readFloat());
-                    producto.setCantidad(dis.readInt());
+
                     producto.setDescripcion(dis.readUTF());
+                    producto.setDia(dis.readInt());
+                    producto.setMes(dis.readInt());
+                    producto.setAno(dis.readInt());
 
                     almacen.getProductos().add(producto);
                 }
@@ -112,11 +115,15 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
 
             for (int i = 0; i < almacen.getProductos().size(); i++) {
                 dis.writeUTF(almacen.getProductos().get(i).getCodProd());
+                dis.writeInt(almacen.getProductos().get(i).getCantidad());
+
                 dis.writeUTF(almacen.getProductos().get(i).getNombreProd());
                 dis.writeFloat(almacen.getProductos().get(i).getPrecio());
-                dis.writeInt(almacen.getProductos().get(i).getCantidad());
-                dis.writeUTF(almacen.getProductos().get(i).getCaducidad());
                 dis.writeUTF(almacen.getProductos().get(i).getDescripcion());
+                dis.writeInt(almacen.getProductos().get(i).getDia());
+                dis.writeInt(almacen.getProductos().get(i).getMes());
+                dis.writeInt(almacen.getProductos().get(i).getAno());
+
             }
             ok = true;
         } catch (IOException e) {

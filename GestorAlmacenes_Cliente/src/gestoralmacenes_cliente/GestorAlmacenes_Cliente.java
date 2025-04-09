@@ -23,7 +23,7 @@ public class GestorAlmacenes_Cliente {
         int Salida;
         do {
 
-            System.out.println("\n**************************** Nombre del almacen: "+nombreFichero);
+            System.out.println("\n**************************** Nombre del almacen: " + nombreFichero);
             System.out.println("**");
             System.out.println("** 1.- Crear un almacen vacío");
             System.out.println("** 2.- Abrir un  fichero de almacén");
@@ -61,21 +61,17 @@ public static void main(String[] args) {
             String codProducto, nombreProd, fechaProd, descripcionProd;
             int numProducto;
             TDatosAlmacen datosAlmacen = null;
-            TProducto datosProducto=new TProducto();
+            TProducto datosProducto = new TProducto();
 
             int Opcion = 0, posAlmacenAbierto = -1;
 
             do {
-                if(posAlmacenAbierto!=-1){
-                datosAlmacen = gestStub.DatosAlmacen(posAlmacenAbierto);
-              
-                Opcion = MenuPrincipal(""+datosAlmacen.getNombre());
-                }else
+                if (posAlmacenAbierto != -1) {
+                    datosAlmacen = gestStub.DatosAlmacen(posAlmacenAbierto);
+
+                    Opcion = MenuPrincipal("" + datosAlmacen.getNombre());
+                } else {
                     Opcion = MenuPrincipal("");
-                    
-                if (Opcion > 9 || Opcion < 0) {
-                    System.out.println("Opcion Incorrecta CRACK, VE ESPABILANDO Y PON HALGO BIEN");
-                    Opcion = MenuPrincipal(nombreFichero);
                 }
 
                 switch (Opcion) {
@@ -85,14 +81,14 @@ public static void main(String[] args) {
                             posAlmacenAbierto = -1;
                         }
                         System.out.println("Introduce el nombre del almacen nuevo: ");
-                        nombreAlmacen=sc2.nextLine();
+                        nombreAlmacen = sc2.nextLine();
                         System.out.println("Introduce la direccion del almacen nuevo");
-                        nombreDireccion=sc2.nextLine();
+                        nombreDireccion = sc2.nextLine();
                         System.out.println("Introduce el nombre del fichero del almacen nuevo");
-                        nombreFichero=sc2.nextLine();
+                        nombreFichero = sc2.nextLine();
 
                         posAlmacenAbierto = gestStub.CrearAlmacen(nombreAlmacen, nombreDireccion, nombreFichero);
-                        System.out.println(""+posAlmacenAbierto);
+                        System.out.println("" + posAlmacenAbierto);
                         break;
                     case 2:
                         if (posAlmacenAbierto != -1) {
@@ -100,7 +96,7 @@ public static void main(String[] args) {
                             posAlmacenAbierto = -1;
                         }
                         System.out.println("Introduce el nombre del fichero del almacen");
-                        nombreFichero=sc2.nextLine();
+                        nombreFichero = sc2.nextLine();
                         posAlmacenAbierto = gestStub.AbrirAlmacen(nombreFichero);
                         if (posAlmacenAbierto == -1) {
                             System.out.println("El fichero no se ha logrado abrir correctamente");
@@ -150,10 +146,13 @@ public static void main(String[] args) {
 
                     case 6:
                         String codProd,
-                         fecha,                         
-                         nombre;
+                         nombre,
+                         descripcion;
                         float precio;
-                        int cantidad;
+                        int cantidad,
+                         dia,
+                         mes,
+                         ano;
                         if (posAlmacenAbierto == -1) {
                             System.out.println("No hay ningún almacen abierto");
                         } else {
@@ -164,14 +163,27 @@ public static void main(String[] args) {
                             nombre = sc2.nextLine();
                             datosProducto.setNombreProd(nombre);
                             System.out.println("Introduce el precio del producto");
-                            precio = sc2.nextFloat();
+                            precio = sc.nextFloat();
                             datosProducto.setPrecio(precio);
                             System.out.println("Introduce el cantidad del producto");
-                            cantidad = sc2.nextInt();
+                            cantidad = sc.nextInt();
                             datosProducto.setCantidad(cantidad);
                             System.out.println("Introduce el fecha del producto");
-                            fecha = sc2.nextLine();
-                            datosProducto.setCaducidad(fecha);
+                            System.out.println("Dia: ");
+                            dia = sc.nextInt();
+
+                            System.out.println("Mes: ");
+                            mes = sc.nextInt();
+
+                            System.out.println("Anyo: ");
+                            ano = sc.nextInt();
+                            datosProducto.setDia(dia);
+                            datosProducto.setMes(mes);
+                            datosProducto.setAno(ano);
+
+                            System.out.println("Introduce una descripcion de un producto: ");
+                            descripcion = sc2.nextLine();
+                            datosProducto.setDescripcion(descripcion);
                             if (!gestStub.AnadirProducto(posAlmacenAbierto, datosProducto)) {
                                 System.out.println("No se pudo insertar el producto de forma correcta");
                             } else {
@@ -190,7 +202,7 @@ public static void main(String[] args) {
                             System.out.println("No hay ningún almacen abierto");
                         } else {
                             System.out.println("Introduce el codigo del producto: ");
-                            codProducto = sc.next();
+                            codProducto = sc2.next();
                             posicion = gestStub.BuscaProducto(posAlmacenAbierto, codProducto);
                             if (posicion == -1) {
                                 System.out.println("El codigo del producto no existe en el almacen abierto.");
@@ -198,46 +210,57 @@ public static void main(String[] args) {
                                 datosProducto = gestStub.ObtenerProducto(posAlmacenAbierto, posicion);
                                 System.out.println("Nombre: " + datosProducto.getNombreProd() + ""
                                         + ". ¿Quieres modificar el nombre del producto?(s/n)");
-                                opt = sc.next();
+                                opt = sc2.next();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce el nuevo nombre del producto: ");
-                                    nombreProd = sc.next();
+                                    nombreProd = sc2.next();
                                     datosProducto.setNombreProd(nombreProd);
                                 }
 
                                 System.out.println("Cantidad: " + datosProducto.getCantidad() + ""
                                         + ". ¿Quieres modificar la cantidad del producto?(s/n)");
-                                opt = sc.next();
+                                opt = sc2.next();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce la cantidad actual del producto: ");
-                                    cantidadProd = sc.nextInt();
+                                    cantidadProd = sc2.nextInt();
                                     datosProducto.setCantidad(cantidadProd);
                                 }
 
                                 System.out.println("Precio: " + datosProducto.getPrecio() + ""
                                         + ". ¿Quieres modificar el precio del producto?(s/n)");
-                                opt = sc.next();
+                                opt = sc2.next();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce el nuevo nombre del producto: ");
                                     precioProd = sc.nextFloat();
                                     datosProducto.setPrecio(precioProd);
                                 }
 
-                                System.out.println("Fecha caducidad: " + datosProducto.getCaducidad() + ""
+                                System.out.println("Fecha caducidad: " + datosProducto.getDia() + "/" + datosProducto.getMes() + "/"
+                                        + "" + datosProducto.getAno() + ""
                                         + ". ¿Quieres modificar la fecha caducidad del producto?(s/n)");
-                                opt = sc.next();
+                                opt = sc2.next();
                                 if (opt.equals("s") || opt.equals("S")) {
-                                    System.out.println("Introduce la nueva fecha de caducidad del producto: ");
-                                    fechaProd = sc.next();
-                                    datosProducto.setCaducidad(fechaProd);
+                                    System.out.println("Introduce el fecha del producto");
+                                    System.out.println("Dia: ");
+                                    dia = sc.nextInt();
+
+                                    System.out.println("Mes: ");
+                                    mes = sc.nextInt();
+
+                                    System.out.println("Anyo: ");
+                                    ano = sc.nextInt();
+                                    datosProducto.setDia(dia);
+                                    datosProducto.setMes(mes);
+                                    datosProducto.setAno(ano);
+
                                 }
 
                                 System.out.println("Descripción: " + datosProducto.getDescripcion() + ""
                                         + ". ¿Quieres modificar la descripcion del producto?(s/n)");
-                                opt = sc.next();
+                                opt = sc2.next();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce la nueva descripcion del producto: ");
-                                    descripcionProd = sc.next();
+                                    descripcionProd = sc2.next();
                                     datosProducto.setDescripcion(descripcionProd);
                                 }
                             }
@@ -258,7 +281,7 @@ public static void main(String[] args) {
                             } else {
                                 datosProducto = gestStub.ObtenerProducto(posAlmacenAbierto, posicion);
                                 System.out.println("CODIGO\t\tNOMBRE\t\tPRECIO\t\tCANTIDAD\t\tFECHA CADUCIDAD");
-                                 System.out.println("" + datosProducto.toString());
+                                System.out.println("" + datosProducto.toString());
                             }
                         }
                         break;
