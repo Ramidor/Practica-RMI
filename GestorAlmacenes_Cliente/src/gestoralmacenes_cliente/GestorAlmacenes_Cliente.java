@@ -107,6 +107,8 @@ public static void main(String[] args) {
                         }
 
                         break;
+                    case 0:
+                        
                     case 3:
                         if (posAlmacenAbierto == -1) {
                             System.out.println("No hay ningún almacen abierto");
@@ -201,7 +203,7 @@ public static void main(String[] args) {
                             System.out.println("No hay ningún almacen abierto");
                         } else {
                             System.out.println("Introduce el codigo del producto: ");
-                            codProducto = sc2.next();
+                            codProducto = sc2.nextLine();
                             posicion = gestStub.BuscaProducto(posAlmacenAbierto, codProducto);
                             if (posicion == -1) {
                                 System.out.println("El codigo del producto no existe en el almacen abierto.");
@@ -209,25 +211,25 @@ public static void main(String[] args) {
                                 datosProducto = gestStub.ObtenerProducto(posAlmacenAbierto, posicion);
                                 System.out.println("Nombre: " + datosProducto.getNombreProd() + ""
                                         + ". ¿Quieres modificar el nombre del producto?(s/n)");
-                                opt = sc2.next();
+                                opt = sc2.nextLine();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce el nuevo nombre del producto: ");
-                                    nombreProd = sc2.next();
+                                    nombreProd = sc2.nextLine();
                                     datosProducto.setNombreProd(nombreProd);
                                 }
 
                                 System.out.println("Cantidad: " + datosProducto.getCantidad() + ""
                                         + ". ¿Quieres modificar la cantidad del producto?(s/n)");
-                                opt = sc2.next();
+                                opt = sc2.nextLine();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce la cantidad actual del producto: ");
-                                    cantidadProd = sc2.nextInt();
+                                    cantidadProd = sc.nextInt();
                                     datosProducto.setCantidad(cantidadProd);
                                 }
 
                                 System.out.println("Precio: " + datosProducto.getPrecio() + ""
                                         + ". ¿Quieres modificar el precio del producto?(s/n)");
-                                opt = sc2.next();
+                                opt = sc2.nextLine();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce el nuevo nombre del producto: ");
                                     precioProd = sc.nextFloat();
@@ -237,7 +239,7 @@ public static void main(String[] args) {
                                 System.out.println("Fecha caducidad: " + datosProducto.getDia() + "/" + datosProducto.getMes() + "/"
                                         + "" + datosProducto.getAno() + ""
                                         + ". ¿Quieres modificar la fecha caducidad del producto?(s/n)");
-                                opt = sc2.next();
+                                opt = sc2.nextLine();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce el fecha del producto");
                                     System.out.println("Dia: ");
@@ -256,7 +258,7 @@ public static void main(String[] args) {
 
                                 System.out.println("Descripción: " + datosProducto.getDescripcion() + ""
                                         + ". ¿Quieres modificar la descripcion del producto?(s/n)");
-                                opt = sc2.next();
+                                opt = sc2.nextLine();
                                 if (opt.equals("s") || opt.equals("S")) {
                                     System.out.println("Introduce la nueva descripcion del producto: ");
                                     descripcionProd = sc2.nextLine();
@@ -273,7 +275,7 @@ public static void main(String[] args) {
                             System.out.println("No hay ningún almacen abierto");
                         } else {
                             System.out.println("Introduce el nombre del codigo del producto: ");
-                            codProducto = sc.next();
+                            codProducto = sc2.nextLine();
                             posicion = gestStub.BuscaProducto(posAlmacenAbierto, codProducto);
                             if (posicion == -1) {
                                 System.out.println("El codigo del producto no existe en el almacen abierto.");
@@ -291,16 +293,16 @@ public static void main(String[] args) {
                             System.out.println("No hay ningún almacen abierto");
                         } else {
                             System.out.println("Introduce el nombre del codigo del producto: ");
-                            codProducto = sc.next();
+                            codProducto = sc2.next();
                             posicion = gestStub.BuscaProducto(posAlmacenAbierto, codProducto);
                             if (posicion == -1) {
                                 System.out.println("El codigo del producto no existe en el almacen abierto.");
                             } else {
                                 datosProducto = gestStub.ObtenerProducto(posAlmacenAbierto, posicion);
                                 System.out.println("¿Quiere eliminar este producto?\n" + datosProducto.toString());
-                                opti = sc.next();
+                                opti = sc2.next();
                                 if (opti.equals("s") || opti.equals("S")) {
-                                    if (gestStub.EliminarProducto(posicion, datosProducto.getCodProd())) {
+                                    if (gestStub.EliminarProducto(posAlmacenAbierto, datosProducto.getCodProd())) {
                                         System.out.println("Producto eliminado con exito");
                                     } else {
                                         System.out.println("Producto no pudo eliminarse con exito");
@@ -310,6 +312,7 @@ public static void main(String[] args) {
 
                         }
                         break;
+                   
 
                 }
 
@@ -317,5 +320,6 @@ public static void main(String[] args) {
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
+        
     }
 }

@@ -64,7 +64,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
         if (posicion == -1) {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(pNomFichero))) {
                 // Leer la cabecera
-                System.out.println("1");
+                
                 int numProductos = dis.readInt();  // Número de productos
                 String nombreAlmacen = dis.readUTF();  // Nombre del almacén
                 String direccionAlmacen = dis.readUTF();  // Dirección del almacén
@@ -234,7 +234,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     private int buscarAlmacenAbierto(String pNomFichero) {
         int posicion = -1;
         for (int i = 0; i < almacenes.size(); i++) {
-            if (almacenes.get(i).getFichero().equals(pNomFichero)) {
+            if (almacenes.get(i).getFichero().equals(pNomFichero)&&almacenes.get(i).getNClientes()!=-1) {
                 posicion = i;
             }
         }
