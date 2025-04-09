@@ -60,10 +60,11 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     @Override
     public int AbrirAlmacen(String pNomFichero) throws RemoteException {
         int posicion = buscarAlmacenAbierto(pNomFichero);
-        TProducto producto = null;
+        TProducto producto = new TProducto();
         if (posicion == -1) {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(pNomFichero))) {
                 // Leer la cabecera
+                System.out.println("1");
                 int numProductos = dis.readInt();  // Número de productos
                 String nombreAlmacen = dis.readUTF();  // Nombre del almacén
                 String direccionAlmacen = dis.readUTF();  // Dirección del almacén
@@ -73,23 +74,21 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
                 almacen.setNClientes(1);
                 // Leer los productos del fichero
                 for (int i = 0; i < numProductos; i++) {
-
                     producto.setCodProd(dis.readUTF());
                     producto.setCantidad(dis.readInt());
                     producto.setNombreProd(dis.readUTF());
                     producto.setPrecio(dis.readFloat());
-
                     producto.setDescripcion(dis.readUTF());
                     producto.setDia(dis.readInt());
                     producto.setMes(dis.readInt());
                     producto.setAno(dis.readInt());
 
                     almacen.getProductos().add(producto);
+                    producto = new TProducto();
                 }
                 almacenes.add(almacen);
                 nAlmacenesAbiertos++;
                 posicion = buscarAlmacenAbierto(pNomFichero);
-                System.out.println("" + posicion);
             } catch (IOException e) {
                 e.printStackTrace();
             }

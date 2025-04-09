@@ -56,7 +56,7 @@ public static void main(String[] args) {
 
             // Obtiene el stub del rmiregistry
             Random rnd = new Random(System.nanoTime());
-            GestionAlmacenes gestStub = (GestionAlmacenes) Naming.lookup("rmi://" + Host + ":" + Puerto + "/GestorAlmacen");
+            GestionAlmacenes gestStub = (GestionAlmacenes) Naming.lookup("rmi://localhost:12/GestorAlmacen");
             String nombreAlmacen = null, nombreDireccion = null, nombreFichero = null;
             String codProducto, nombreProd, fechaProd, descripcionProd;
             int numProducto;
@@ -138,9 +138,7 @@ public static void main(String[] args) {
                             for (int i = 0; i < numProducto; i++) {
                                 datosProducto = gestStub.ObtenerProducto(posAlmacenAbierto, i);
                                 System.out.println("" + datosProducto.toString());
-
                             }
-
                         }
                         break;
 
