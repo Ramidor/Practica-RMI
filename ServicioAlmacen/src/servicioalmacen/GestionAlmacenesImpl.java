@@ -93,7 +93,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
                 e.printStackTrace();
             }
         } else {
-            int nClientes = almacenes.get(posicion).getNClientes();
+            int nClientes = almacenes.get(posicion).getNClientes()+1;// aqui no habria que sumar un cliente?
             almacenes.get(posicion).setNClientes(nClientes);
             nAlmacenesAbiertos++;
         }

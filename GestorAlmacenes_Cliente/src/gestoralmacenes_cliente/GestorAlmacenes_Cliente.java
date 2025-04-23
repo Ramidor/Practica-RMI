@@ -20,7 +20,7 @@ public class GestorAlmacenes_Cliente {
 
     public static int MenuPrincipal(String nombreFichero) {
         Scanner Teclado = new Scanner(System.in);
-        int Salida;
+        int Salida = -1;
         do {
 
             System.out.println("\n**************************** Nombre del almacen: " + nombreFichero);
@@ -37,7 +37,13 @@ public class GestorAlmacenes_Cliente {
             System.out.println("** 0.- Salir");
             System.out.println("**");
             System.out.print("** Elige Opcion:");
-            Salida = Teclado.nextInt();
+            try {
+                Salida = Teclado.nextInt();
+            } catch (Exception e) {
+                System.out.println("");
+                System.out.println("Has introducido valores incorrectos.");
+            }
+            
         } while (Salida < 0 || Salida > 9);
         return Salida;
     }
@@ -89,7 +95,7 @@ public static void main(String[] args) {
                         nombreFichero = sc2.nextLine();
 
                         posAlmacenAbierto = gestStub.CrearAlmacen(nombreAlmacen, nombreDireccion, nombreFichero);
-                        System.out.println("" + posAlmacenAbierto);
+                        System.out.println("Almacen abierto en la posicion: " + posAlmacenAbierto);
                         break;
                     case 2:
                         if (posAlmacenAbierto != -1) {
@@ -281,8 +287,8 @@ public static void main(String[] args) {
                                 System.out.println("El codigo del producto no existe en el almacen abierto.");
                             } else {
                                 datosProducto = gestStub.ObtenerProducto(posAlmacenAbierto, posicion);
-                                System.out.println("CODIGO\t\tNOMBRE\t\tPRECIO\t\tCANTIDAD\t\tFECHA CADUCIDAD");
-                                System.out.println("" + datosProducto.toString());
+                                System.out.println("CODIGO\t\tNOMBRE\t\tPRECIO\t\tCANTIDAD\t\tFECHA CADUCIDAD\t\tDESCRIPCION");
+                                System.out.println("" + datosProducto.toString()+"\t\t"+datosProducto.getDescripcion());
                             }
                         }
                         break;
