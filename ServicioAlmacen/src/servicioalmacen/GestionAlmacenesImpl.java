@@ -64,7 +64,7 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
         if (posicion == -1) {
             try (DataInputStream dis = new DataInputStream(new FileInputStream(pNomFichero))) {
                 // Leer la cabecera
-                
+
                 int numProductos = dis.readInt();  // Número de productos
                 String nombreAlmacen = dis.readUTF();  // Nombre del almacén
                 String direccionAlmacen = dis.readUTF();  // Dirección del almacén
@@ -86,14 +86,13 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
                     almacen.getProductos().add(producto);
                     producto = new TProducto();
                 }
-                almacenes.add(almacen);
+                posicion = insertarAlmacen(almacen);
                 nAlmacenesAbiertos++;
-                posicion = buscarAlmacenAbierto(pNomFichero);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            int nClientes = almacenes.get(posicion).getNClientes()+1;// aqui no habria que sumar un cliente?
+            int nClientes = almacenes.get(posicion).getNClientes() + 1;// aqui no habria que sumar un cliente?
             almacenes.get(posicion).setNClientes(nClientes);
             nAlmacenesAbiertos++;
         }
@@ -193,26 +192,29 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
 
     @Override
     public boolean AnadirProducto(int pAlmacen, TProducto pProdNuevo) throws RemoteException {
-        boolean ok = false;
+        boolean insertado = true;
         TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
-        System.out.println("Pito chico");
-        if (almacen.getProductos().add(pProdNuevo)) {
-            System.out.println("Pito intermedio");
-            ok = true;
+        for (int i = 0; i < almacen.getProductos().size(); i++) {
+            if (almacen.getProductos().get(i).getCodProd().equals(pProdNuevo.getCodProd())) {
+                insertado = false;
+            }
         }
-        return ok;
+        if (insertado) {
+            almacen.getProductos().add(pProdNuevo);
+        }
+        return insertado;
     }
 
     @Override
     public boolean ActualizarProducto(int pAlmacen, TProducto pProducto) throws RemoteException {
         boolean ok = false;
-        
+
         int posicion = BuscaProducto(pAlmacen, pProducto.getCodProd());
         TDatosAlmacen almacen = DatosAlmacen(pAlmacen);
         if (posicion != -1) {
-            
+
             almacen.getProductos().add(posicion, pProducto);
-            almacen.getProductos().remove(posicion+1);
+            almacen.getProductos().remove(posicion + 1);
             ok = true;
         }
         return ok;
@@ -234,11 +236,30 @@ public class GestionAlmacenesImpl extends UnicastRemoteObject implements Gestion
     private int buscarAlmacenAbierto(String pNomFichero) {
         int posicion = -1;
         for (int i = 0; i < almacenes.size(); i++) {
-            if (almacenes.get(i).getFichero().equals(pNomFichero)&&almacenes.get(i).getNClientes()!=-1) {
+            if (almacenes.get(i).getFichero().equals(pNomFichero) && almacenes.get(i).getNClientes() != -1) {
                 posicion = i;
             }
         }
 
         return posicion;
+    }
+
+    private int insertarAlmacen(TDatosAlmacen almacen) {
+        boolean encontrado = false;
+        int posi = -1;
+        for (int i = 0; i < almacenes.size(); i++) {
+            if (almacenes.get(i).getNClientes() == -1) {
+                almacenes.remove(i);
+                almacenes.add(i, almacen);
+                encontrado = true;
+                posi = i;
+            }
+        }
+        if (!encontrado) {
+            almacenes.add(almacen);
+            posi = almacenes.size() - 1;
+        }
+
+        return posi;
     }
 }
